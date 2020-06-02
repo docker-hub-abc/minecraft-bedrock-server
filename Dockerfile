@@ -20,4 +20,3 @@ RUN unzip bedrock-server-1.14.60.5.zip && \
 CMD LD_LIBRARY_PATH=. ./bedrock_server
 
 VOLUME ["/minecraft-server-data"]
-
