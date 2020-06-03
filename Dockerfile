@@ -1,8 +1,15 @@
+FROM alpine:3.12.0
+
+WORKDIR /minecraft-server-data
+ADD https://minecraft.azureedge.net/bin-linux/bedrock-server-1.14.60.5.zip /minecraft-server-data
+RUN unzip bedrock-server-1.14.60.5.zip && \
+    rm bedrock-server-1.14.60.5.zip && \
+    chmod +x bedrock_server
+
 FROM ubuntu:20.04
 
 RUN apt-get update && \
     apt-get install -y \
-    unzip \
     curl \
     vim \
     && apt-get clean
@@ -10,13 +17,7 @@ RUN apt-get update && \
 EXPOSE 19132/udp
 
 WORKDIR /minecraft-server-data
-
-ADD https://minecraft.azureedge.net/bin-linux/bedrock-server-1.14.60.5.zip /minecraft-server-data
-
-RUN unzip bedrock-server-1.14.60.5.zip && \
-    rm bedrock-server-1.14.60.5.zip && \
-    chmod +x bedrock_server 
-
+COPY --from=0 /minecraft-server-data .
 CMD LD_LIBRARY_PATH=. ./bedrock_server
 
 VOLUME ["/minecraft-server-data"]
